@@ -68,3 +68,25 @@ def test_eight_edge_degree():
 
     assert group_edge_degree(m, np.repeat(True, x[0])) == 0
     assert group_edge_degree(m, np.repeat(False, x[0])) == 0
+
+
+def test_subg_size():
+
+    x = tests["eight"]
+    m = couples_to_sparse_matrix(x[1], x[0])
+    g1 = set([4, 5, 6])
+    g1 = np.array([x in g1 for x in range(x[0])])
+
+    assert subg_size(m, g1) == 3
+    assert subg_size(m, s2f({})) == 0
+
+
+def test_subg_vol():
+
+    x = tests["eight"]
+    m = couples_to_sparse_matrix(x[1], x[0])
+    g1 = set([4, 5, 6])
+    g1 = np.array([x in g1 for x in range(x[0])])
+
+    assert subg_vol(m, g1) == 5
+    assert size(m, s2f({})) == 0
