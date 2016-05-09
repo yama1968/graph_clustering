@@ -78,7 +78,7 @@ def test_subg_size():
     g1 = np.array([x in g1 for x in range(x[0])])
 
     assert subg_size(m, g1) == 3
-    assert subg_size(m, s2f({})) == 0
+    assert subg_size(m, s2f({}, x[0])) == 0
 
 
 def test_subg_vol():
@@ -88,5 +88,9 @@ def test_subg_vol():
     g1 = set([4, 5, 6])
     g1 = np.array([x in g1 for x in range(x[0])])
 
-    assert subg_vol(m, g1) == 5
-    assert size(m, s2f({})) == 0
+    print(subg_vol(m, g1), subg_vol(m, s2f([4], x[0])))
+
+    assert subg_vol(m, g1) == 8
+    assert subg_vol(m, s2f([4], x[0])) == 4
+    assert subg_vol(m, s2f([5, 6], x[0])) == 4
+    assert subg_vol(m, s2f({}, x[0])) == 0

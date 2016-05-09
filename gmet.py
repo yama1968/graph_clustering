@@ -17,14 +17,14 @@ the number of vertices outside of the group to which it is connected."""
     return (matrix[~ group, :][:, group].sum(axis=1) != 0).sum()
 
 
-subg_cut = group_vertex_degree
-
-
 def group_edge_degree(matrix, group):
     """Compute the edge degree of a group:
 the number of edges going from the group to the outside."""
 
     return (matrix[~ group, :][:, group].sum(axis=1)).sum()
+
+
+subg_cut = group_edge_degree
 
 
 def couples_to_sparse_matrix(l, n_vertices):
@@ -56,33 +56,29 @@ Volume = sum of degrees of nodes"""
     return (matrix[:, group].sum(axis=1)).sum()
 
 
-def n_cut_list_vec(matrix, clusters):
+def subg_size_vec(matrix, clusters):
 
     N = matrix.shape[0]
     nc = 1 + np.max(clusters)
-    
+
     grid = csr_matrix((np.ones(N), (clusters, range(N))), shape=(nc, N))
 
     return grid.sum(axis=0)
 
 
+def ratio_cut_list_vec(matrix, clusters):
+
+    return np.array([subg_cut(matrix, clusters == i) for i in range(np.max(clusters) + 1)]) / \
+        subg_size_vec(mtarix, clusters)
+
+
 def ratio_cut_list(matrix, clusters):
 
     return np.array([subg_cut(matrix, clusters == i) / subg_size(matrix, clusters == i)
-                        for i in range(np.max(clusters) + 1)])
+                     for i in range(np.max(clusters) + 1)])
 
 
 def n_cut_list(matrix, clusters):
 
     return np.array([subg_cut(matrix, clusters == i) / subg_vol(matrix, clusters == i)
-                        for i in range(np.max(clusters) + 1)])
-
-
-def n_cut_list_vec(matrix, clusters):
-
-    N = matrix.shape[0]
-    nc = 1 + np.max(clusters)
-    
-    grid = csr_matrix((np.ones(N), (clusters, range(N))), shape=(nc, N))
-
-    return grid.dot(matrix)
+                     for i in range(np.max(clusters) + 1)])
